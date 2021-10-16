@@ -1,0 +1,15 @@
+POST http://localhost:5000/user/login
+Content-Type: application/json
+
+{
+    "name":"admin",
+    "password":"admin2021"
+}
+
+###
+
+GET http://localhost:5000/lottery/giaimot
+
+###
+
+GET http://localhost:5000/lottery/giai1/17-10-2021
