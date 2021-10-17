@@ -5,22 +5,19 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'; // note: have to create .env file after install dotenv
-// const dotenv = require('dotenv');
 ////import routers////
 import lotteryRoute from './routes/lottery.js';
 import userBoute from './routes/user.js';
-// const express = require('express');
-// const bodyParser = require('body-parser');
-// const cors = require('cors');
-// const mongoos = require('mongoose');
+import path from 'path';
 
 const app = express();
 dotenv.config();
 app.use(express.json());
 app.use(cors());
-// app.use(bodyParser.json({ limit: '30mb', extended: true }));
-// app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
+app.use(bodyParser.json({ limit: '30mb', extended: true }));
+app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 
+app.use(favicon(path.join(dirname, "build", "favicon.ico")));
 
 app.use('/lottery',lotteryRoute);
 app.use('/user',userBoute);
