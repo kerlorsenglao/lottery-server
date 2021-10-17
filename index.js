@@ -22,7 +22,8 @@ app.get('/',(req,res)=>{
     res.send('Hello Here Is Heroku API');
 })
 let port = process.env.PORT || 5000;
-const url = process.env.CONNECTION_URL;
+const url = "mongodb+srv://kenshin:kenshin2021@cluster0.x4h1o.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+// const url = process.env.CONNECTION_URL;
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => app.listen(port,function(){
         console.log(`Server running on port:${port}`)
