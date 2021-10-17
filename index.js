@@ -18,7 +18,6 @@ app.use(bodyParser.json({ limit: '30mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 
 app.use(favicon(path.join(dirname, "build", "favicon.ico")));
-
 app.use('/lottery',lotteryRoute);
 app.use('/user',userBoute);
 app.get('/',(req,res)=>{
