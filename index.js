@@ -21,7 +21,7 @@ app.use('/user',userBoute);
 app.get('/',(req,res)=>{
     res.send('Hello Here Is Heroku API');
 })
-const port = process.env.PORT || 5000;
+let port = process.env.PORT || 5000;
 const url = process.env.CONNECTION_URL;
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => app.listen(port,function(){
