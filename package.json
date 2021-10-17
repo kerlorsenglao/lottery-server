@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node" : "14.17.6"
+  },
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon --exec babel-node src/index.js"
   },
   "author": "",
   "license": "ISC",
