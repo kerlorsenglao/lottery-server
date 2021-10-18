@@ -1,4 +1,4 @@
-
+import mongoose from 'mongoose';
 import LotteryMessage from "../models/lotteryMessage.js";
 
 export const getLottery = async (req, res) => {
@@ -24,7 +24,7 @@ export const createLottery = async (req, res) => {
 //======dacbiet======
 export const getDacbiet = async (req, res) => {
     const date = req.params.date;
-    
+
     try {
         const dacbiet = await LotteryMessage.find({ "date": date, "type": "0" });
         res.status(200).json({ data: dacbiet });
@@ -35,21 +35,30 @@ export const getDacbiet = async (req, res) => {
 export const postDacbiet = async (req, res) => {
     var date = req.body.date;
     var data = req.body;
-    // console.log(data);
+    // console.log('dacbiet:'+data);
     try {
-        const result = LotteryMessage.find({ 'date': date, 'type': "0" });
-        if (result.length < 1) {
-            //Just save
-            const newLottery = new LotteryMessage(data);
-            await newLottery.save()
-            res.json({ status: true, msg: 'Save successfully' });
-        } else {
-            // have update
-            await LotteryMessage.updateOne(result[0],{$set:data})
-            res.json({ status: true, msg: 'Update successfully' });
-        }
-    } catch (error) {
+        await LotteryMessage.find({ $and: [{ date: date }, { type: "0" }] }, (err, result) => {
+            if (err) {
+                res.send(err)
+            } else {
+                //mongoose.Types.ObjectId.isValid(_id)
+                if (result.length > 0) {
+                    const _id = result[0]._id;
+                    LotteryMessage.findByIdAndUpdate(_id,data, { new: true },(error,succ)=>{
+                        if(error) res.send(err)
+                        res.status(200).json({ msg: 'Update succfully' });
+                    });
+                } else {
+                    console.log("==here=save==");
+                    const newLottery = new LotteryMessage(data);
+                    newLottery.save();
+                    res.status(200).json({ data: newLottery, msg: 'Save succfully' });
 
+                }
+            }
+        })
+    } catch (error) {
+        console.log(error)
     }
 }
 //======GiaiMot======
@@ -65,23 +74,31 @@ export const getGiaiMot = async (req, res) => {
 export const postGiaiMot = async (req, res) => {
     var date = req.body.date;
     var data = req.body;
+    // console.log("giai1="+data);
     try {
-        const result = LotteryMessage.find({ 'date': date, 'type': 1 });
-        if (result.length < 1) {
-            //Just save
-            const newLottery = new LotteryMessage(data);
-            await newLottery.save()
-            res.json({ status: true, msg: 'Save successfully' });
-        } else {
-            // have update
-            await LotteryMessage.updateOne(result[0],{$set:data}),
-            res.json({ status: true, msg: 'Update successfully' });
-        }
-    } catch (error) {
+        await LotteryMessage.find({ $and: [{ date: date }, { type: "1" }] }, (err, result) => {
+            if (err) {
+                res.send(err)
+            } else {
+                //mongoose.Types.ObjectId.isValid(_id)
+                if (result.length > 0) {
+                    const _id = result[0]._id;
+                    LotteryMessage.findByIdAndUpdate(_id,data, { new: true },(error,succ)=>{
+                        if(error) res.send(err)
+                        res.status(200).json({ msg: 'Update succfully' });
+                    });
+                } else {
+                    const newLottery = new LotteryMessage(data);
+                    newLottery.save();
+                    res.status(200).json({ data: newLottery, msg: 'Save succfully' });
 
+                }
+            }
+        })
+    } catch (error) {
+        console.log(error)
     }
 }
-
 //======GiaiHai======
 export const getGiaiHai = async (req, res) => {
     const date = req.params.date;
