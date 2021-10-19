@@ -9,22 +9,43 @@ export const getLottery = async (req, res) => {
         res.status(404).json({ 'message': error.message });
     }
 }
-
+//======create lottery ===> giai2 --> giai7
 export const createLottery = async (req, res) => {
-    const lottery = req.body;
-    const newLottery = new LotteryMessage(lottery);
+    const lottery = req.body.data;
     try {
-        await newLottery.save();
-        res.status(201).json(newLottery);
+        await LotteryMessage.insertMany(lottery, (error, success) => {
+            if (error) console.log(error)
+            res.status(200).json({ data: lottery, msg: 'Create successful' });
+        });
     } catch (error) {
         res.status(409).json({ 'message': error.message });
     }
 }
-
-//======dacbiet======
+//=====get lottery by date===
+export const getLotteryByDate = async (req, res) => {
+    var date = req.params.date;
+    try {
+        var data = await LotteryMessage.find({ 'date': date });
+        res.status(200).json({ data: data, msg: 'get data success' });
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+//=====remove by date==== all
+export const removeLotteryByDate = async (req, res) => {
+    var date = req.params.date;
+    try {
+        await LotteryMessage.deleteMany({ "date": date }, (err, result) => {
+            if (err) console.log(err)
+            res.status(200).json({ msg: 'delete successfuly' });
+        })
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+///////======dacbiet======/////
 export const getDacbiet = async (req, res) => {
     const date = req.params.date;
-
     try {
         const dacbiet = await LotteryMessage.find({ "date": date, "type": "0" });
         res.status(200).json({ data: dacbiet });
@@ -37,26 +58,18 @@ export const postDacbiet = async (req, res) => {
     var data = req.body;
     // console.log('dacbiet:'+data);
     try {
-        await LotteryMessage.find({ $and: [{ date: date }, { type: "0" }] }, (err, result) => {
-            if (err) {
-                res.send(err)
-            } else {
-                //mongoose.Types.ObjectId.isValid(_id)
-                if (result.length > 0) {
-                    const _id = result[0]._id;
-                    LotteryMessage.findByIdAndUpdate(_id,data, { new: true },(error,succ)=>{
-                        if(error) res.send(err)
-                        res.status(200).json({ msg: 'Update succfully' });
-                    });
-                } else {
-                    console.log("==here=save==");
-                    const newLottery = new LotteryMessage(data);
-                    newLottery.save();
-                    res.status(200).json({ data: newLottery, msg: 'Save succfully' });
-
-                }
-            }
-        })
+        var result = await LotteryMessage.find({ $and: [{ date: date }, { type: "0" }] })
+        if (result.length > 0) {
+            const _id = result[0]._id;
+            LotteryMessage.findByIdAndUpdate(_id, data, { new: true }, (error, succ) => {
+                if (error) res.send(err)
+                res.status(200).json({ msg: 'Update succfully' });
+            });
+        } else {
+            const newLottery = new LotteryMessage(data);
+            newLottery.save();
+            res.status(200).json({ data: newLottery, msg: 'Save succfully' });
+        }
     } catch (error) {
         console.log(error)
     }
@@ -76,25 +89,37 @@ export const postGiaiMot = async (req, res) => {
     var data = req.body;
     // console.log("giai1="+data);
     try {
-        await LotteryMessage.find({ $and: [{ date: date }, { type: "1" }] }, (err, result) => {
-            if (err) {
-                res.send(err)
-            } else {
-                //mongoose.Types.ObjectId.isValid(_id)
-                if (result.length > 0) {
-                    const _id = result[0]._id;
-                    LotteryMessage.findByIdAndUpdate(_id,data, { new: true },(error,succ)=>{
-                        if(error) res.send(err)
-                        res.status(200).json({ msg: 'Update succfully' });
-                    });
-                } else {
-                    const newLottery = new LotteryMessage(data);
-                    newLottery.save();
-                    res.status(200).json({ data: newLottery, msg: 'Save succfully' });
+        var result = await LotteryMessage.find({ $and: [{ date: date }, { type: "1" }] })
+        if (result.length > 0) {
+            const _id = result[0]._id;
+            LotteryMessage.findByIdAndUpdate(_id, data, { new: true }, (error, succ) => {
+                if (error) res.send(err)
+                res.status(200).json({ msg: 'Update succfully' });
+            });
+        } else {
+            const newLottery = new LotteryMessage(data);
+            newLottery.save();
+            res.status(200).json({ data: newLottery, msg: 'Save succfully' });
+        }
+        // await LotteryMessage.find({ $and: [{ date: date }, { type: "1" }] }, (err, result) => {
+        //     if (err) {
+        //         res.send(err)
+        //     } else {
+        //         //mongoose.Types.ObjectId.isValid(_id)
+        //         if (result.length > 0) {
+        //             const _id = result[0]._id;
+        //             LotteryMessage.findByIdAndUpdate(_id, data, { new: true }, (error, succ) => {
+        //                 if (error) res.send(err)
+        //                 res.status(200).json({ msg: 'Update succfully' });
+        //             });
+        //         } else {
+        //             const newLottery = new LotteryMessage(data);
+        //             newLottery.save();
+        //             res.status(200).json({ data: newLottery, msg: 'Save succfully' });
 
-                }
-            }
-        })
+        //         }
+        //     }
+        // })
     } catch (error) {
         console.log(error)
     }

@@ -1,12 +1,14 @@
 import express from 'express';
 import {getLottery,createLottery,getDacbiet,
     getGiaiMot,getGiaiHai,getGiaiBa,getGiaiBon,getGiaiNam,getGiaiSau,getGiaiBay,
-    postDacbiet,postGiaiMot} from '../controllers/lottery.js';
+    postDacbiet,postGiaiMot,getLotteryByDate,removeLotteryByDate} from '../controllers/lottery.js';
 
 const router = express.Router();
 
 router.post('/',createLottery);
 router.get('/',getLottery);
+router.get('/:date',getLotteryByDate);
+router.delete('/:date',removeLotteryByDate);
 
 router.get('/dacbiet/:date',getDacbiet);
 router.post('/dacbiet',postDacbiet);
