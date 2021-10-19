@@ -17,3 +17,7 @@ GET http://localhost:5000/lottery/giai1/17-10-2021
 ###
 
 GET http://localhost:5000/lottery/18-10-2021
+
+###
+
+DELETE  http://localhost:5000/lottery/19-10-2021
